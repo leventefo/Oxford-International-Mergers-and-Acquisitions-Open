@@ -7,7 +7,7 @@ from collections import defaultdict
 
 def get_metadata(func, api_key, **args):
     
-    params = {'api_key': "1c1745445c55481d03fe377d8df790e8"}
+    params = {'api_key': api_key}
     response = requests.get('https://data.businessquant.com/universe', params=params)
     my_response = json.loads(response.content.decode("utf-8"))
     data = my_response["data"]
@@ -74,9 +74,9 @@ def get_tickers_by_sector_and_industry(data, args):
 def main():
 
     API_KEY = "1c1745445c55481d03fe377d8df790e8"
-    #print(get_metadata(get_all_sectors, API_KEY))
+    print(get_metadata(get_all_sectors, API_KEY))
     #print(get_metadata(get_all_industries, API_KEY))
-    print(get_metadata(get_industry_by_sector, API_KEY, sector = "Financial Services"))
+    #print(get_metadata(get_industry_by_sector, API_KEY, sector = "Financial Services"))
     #print(get_metadata(get_tickers_by_sector_and_industry, API_KEY, sector = "Financial Services", industry = "Regional Banks"))
 
 main()
