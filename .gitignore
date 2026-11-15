@@ -1,1 +1,10 @@
+RED/
+api_keys/
 api_testing/
+data/
+env/
+log.txt
+my_df.csv
+plots/
+test.py
+test2.py

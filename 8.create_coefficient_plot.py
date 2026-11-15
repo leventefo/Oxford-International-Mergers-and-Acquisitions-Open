@@ -1,0 +1,98 @@
+import plotly.graph_objects as go
+import pandas as pd
+from datetime import datetime
+
+
+def create_figure(title):
+
+    fig = go.Figure().update_layout(template ="plotly_white", title = title, title_x = 0.5, title_y = 0.95, title_font_weight = 600)
+    fig.update_layout(width = 1200, height = 800)
+
+    return fig
+
+
+
+def touch_up_figure(fig):
+
+    fig.update_layout(margin=dict(t=50, b=120, l=250, r=150))
+    fig.update_layout(margin = dict(autoexpand = False))
+    fig.update_layout(paper_bgcolor = "#FFFFFF")
+    fig.update_layout(plot_bgcolor = "#FFFFFF")
+    fig.update_layout(font_family = "Garamond", font_weight = 1000, font_size = 19)
+    fig.update_yaxes(tickfont = dict(size = 15, weight = 600))
+    fig.update_xaxes(title_font = dict(size = 20, weight = 600), title_text = "Coefficient", title_standoff = 20)
+    fig.update_layout(legend2 = dict(orientation = "h", y = -0.1, x = 0.36, font_color = "#9C2225", font_size = 17))
+    fig.update_yaxes(ticksuffix = " ")
+
+
+def plot_coefficient_dataframe(df, fig):
+    
+    for index, row in df.iterrows():
+
+        if row["pval"] < 0.05:
+            color = "#9C2225"
+
+        else:
+            color = "#012F68"
+
+
+        fig.add_trace(
+            go.Scatter(
+                x=[row["coef"]], 
+                y=[f'<span style="color:{color};">{index}</span>'],
+                mode = "markers",
+                error_x = dict(
+                    type="data",
+                    symmetric = False,
+                    array = [row["err_left"]],
+                    arrayminus = [row["err_right"]],
+                    width = 6,
+                    thickness = 3),
+                showlegend = False,
+                line = dict(
+                    width = 10, 
+                    color = color),
+                name = index,
+                legend = "legend1"))
+
+
+    fig.add_trace(
+        go.Scatter(
+            x=[None], 
+            y = [None],
+            mode = "markers",
+            name = "Significant (p < 0.05)",
+            marker = dict(color = "#9C2225"),
+            legend = "legend2",
+            showlegend=True,
+        )
+    )
+        
+
+    fig.add_vline(
+        x=0,
+        line = dict(width = 3, dash = "dash"),
+        opacity = 0.5,
+        annotation_text = "Null",
+        annotation_position = "top",
+        annotation_font = dict(size = 15)
+    )
+
+
+    fig.update_yaxes(autorange = "reversed")
+
+
+    touch_up_figure(fig)
+
+
+
+def main():
+    
+    coefficient_df = pd.read_parquet("data/10.regression_results.parquet")
+    fig = create_figure("")
+    plot_coefficient_dataframe(coefficient_df, fig)
+    fig.show(renderer="browser")
+    fig.write_image(f"plots/{datetime.now().strftime("%Y-%m-%d--%H-%M-%S")}.png", width = 1200, height = 800, scale = 6)
+
+
+main()
