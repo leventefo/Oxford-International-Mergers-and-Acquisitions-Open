@@ -61,7 +61,7 @@ def run_regressions_for_r_squared():
 
     for data_set in ["9.index_with_hood"]:
 
-        df_myData = pd.read_parquet(f"data/{data_set}.parquet")
+        df_myData = pd.read_parquet(f"../data/{data_set}.parquet")
 
         outcome_variable = df_myData[df_myData.columns[-1]]
         predictor_variables = sm.add_constant(df_myData[df_myData.columns[:-1]])
@@ -76,8 +76,8 @@ def run_regressions_for_r_squared():
 
 
   
-    print(rsquared_and_predictors)
-    save_my_json(rsquared_and_predictors, "11.r_squared_changes")
+    #print(rsquared_and_predictors)
+    #save_my_json(rsquared_and_predictors, "11.r_squared_changes")
 
 
 
@@ -85,12 +85,12 @@ def run_regressions_for_r_squared():
 def run_regressions():
 
     for data_set in ["9.index_with_hood"]:
-        df_myData = pd.read_parquet(f"data/{data_set}.parquet")
+        df_myData = pd.read_parquet(f"../data/{data_set}.parquet")
         regression_results = regress(df_myData)
         print(regression_results.summary())
-        save_regression_summary(regression_results, "10.regression_summary")
+        #save_regression_summary(regression_results, "10.regression_summary")
         #save_regression(get_coef_table(regression_results), "10.regression_results")
-        save_regression(create_coefficient_dataframe(regression_results), "10.regression_results")
+        #save_regression(create_coefficient_dataframe(regression_results), "10.regression_results")
         
 
 

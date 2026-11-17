@@ -9,7 +9,7 @@ from datetime import datetime
 def create_figure(title):
 
     fig = go.Figure().update_layout(template ="plotly_white", title = title, title_x = 0.5, title_y = 0.95, title_font_weight = 600)
-    fig.update_layout(width = 1200, height = 800)
+    fig.update_layout(width = 1500, height = 800)
 
     return fig
 
@@ -22,10 +22,13 @@ def touch_up_figure(fig):
     fig.update_layout(paper_bgcolor = "#FFFFFF")
     fig.update_layout(plot_bgcolor = "#FFFFFF")
     fig.update_layout(font_family = "Garamond", font_weight = 1000, font_size = 19)
-    fig.update_yaxes(tickfont = dict(size = 15, weight = 600))
+    fig.update_yaxes(tickfont = dict(size = 16, weight = 600))
     fig.update_xaxes(title_font = dict(size = 17, weight = 800), title_standoff = 20, title_text = r"$\mathbf{|\%\Delta|}\ \textbf{in}\ \mathbf{R^{\!2}}\ \textbf{after removing predictor}$")
     fig.update_layout(legend2 = dict(orientation = "h", y = -0.1, x = 0.36, font_color = "#9C2225", font_size = 19))
     fig.update_yaxes(ticksuffix = " ")
+    fig.update_xaxes(showgrid=False, zeroline=False, title_font = dict(color='#A1C909'), tickcolor = "#A1C909", tickfont = dict(color='#A1C909'))
+    fig.update_yaxes(showgrid=False, zeroline=False, title_font = dict(color='#A1C909'), tickcolor = "#A1C909", tickfont = dict(color='#A1C909'))
+    fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 
 
 def create_bar_plot(fig, my_dict):
@@ -35,9 +38,9 @@ def create_bar_plot(fig, my_dict):
     for industry in my_dict:
 
         if industry in significants:
-            color = "#9C2225"
+            color = "#B10000"
         else:
-            color = "#012F68"
+            color = "#A1C909"
 
         fig.add_trace(
             go.Bar(
@@ -45,6 +48,10 @@ def create_bar_plot(fig, my_dict):
                 y = [f'<span style="color:{color};">{industry}</span>'],
                 marker = dict(
                     color = color,
+                line=dict(
+                    color=color,
+                    width=1
+                )
                 ),
                 orientation = "h",
                 name = industry,
@@ -59,9 +66,9 @@ def create_bar_plot(fig, my_dict):
     for val, lab in zip(np.round(list(my_dict.values()), decimals = 2), list(my_dict.keys())):
 
         if lab in significants:
-            color = "#9C2225"
+            color = "#B10000"
         else:
-            color = "#012F68"
+            color = "#A1C909"
 
         annotations.append(dict(
                         y=f'<span style="color:{color};">{lab}</span>', 
@@ -78,7 +85,7 @@ def create_bar_plot(fig, my_dict):
 
 def get_data():
 
-    with open(f"data/11.r_squared_changes.json") as f:
+    with open(f"../data/11.r_squared_changes.json") as f:
         data = json.load(f)
 
     return data
@@ -98,7 +105,8 @@ def main():
     fig = create_figure("")
     data = sort_dictionary(get_data())
     create_bar_plot(fig, data)
-    fig.show()
-    fig.write_image(f"plots/{datetime.now().strftime("%Y-%m-%d--%H-%M-%S")}.png", width = 1200, height = 800, scale = 6)
+    js = '''document.body.style.backgroundColor = "#202825"; '''
+    fig.show(renderer="browser", post_script=[js])
+    fig.write_image(f"../plots/{datetime.now().strftime("%Y-%m-%d--%H-%M-%S")}.png", width = 1500, height = 800, scale = 6)
 
 main()
