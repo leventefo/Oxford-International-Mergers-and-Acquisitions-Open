@@ -6,7 +6,7 @@ from datetime import datetime
 def create_figure(title):
 
     fig = go.Figure().update_layout(template ="plotly_white", title = title, title_x = 0.5, title_y = 0.95, title_font_weight = 600)
-    fig.update_layout(width = 1300, height = 1200)
+    fig.update_layout(width = 1500, height = 800)
 
     return fig
 
@@ -14,17 +14,17 @@ def create_figure(title):
 
 def touch_up_figure(fig):
 
-    fig.update_layout(margin=dict(t=50, b=80, l=250, r=50))
+    fig.update_layout(margin=dict(t=50, b=80, l=300, r=50))
     fig.update_layout(margin = dict(autoexpand = False))
     fig.update_layout(paper_bgcolor = "#FFFFFF")
     fig.update_layout(plot_bgcolor = "#FFFFFF")
     fig.update_layout(font_family = "Garamond", font_weight = 1000, font_size = 19)
-    fig.update_yaxes(tickfont = dict(size = 16, weight = 600))
+    fig.update_yaxes(tickfont = dict(size = 18, weight = 600))
     fig.update_xaxes(title_font = dict(size = 20, weight = 600), title_text = "Regression Coefficient", title_standoff = 20)
     fig.update_layout(legend2 = dict(orientation = "h", y = -0.1, x = 0.36, font_color = "#9C2225", font_size = 17))
     fig.update_yaxes(ticksuffix = " ")
-    fig.update_xaxes(showgrid=False, zeroline=False, title_font = dict(color='#A1C909'), tickcolor = "#A1C909", tickfont = dict(color='#A1C909'))
-    fig.update_yaxes(showgrid=False, zeroline=False, title_font = dict(color='#A1C909'), tickcolor = "#A1C909", tickfont = dict(color='#A1C909'))
+    fig.update_xaxes(showgrid=False, zeroline=False, title_font = dict(color='#FFFFFF'), tickcolor = "#FFFFFF", tickfont = dict(color='#FFFFFF'))
+    fig.update_yaxes(showgrid=False, zeroline=False, title_font = dict(color='#FFFFFF'), tickcolor = "#FFFFFF", tickfont = dict(color='#FFFFFF'))
     fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 
 
@@ -33,10 +33,10 @@ def plot_coefficient_dataframe(df, fig):
     for index, row in df.iterrows():
 
         if row["pval"] < 0.05:
-            color = "#B10000"
+            color = "#00C805"
 
         else:
-            color = "#A1C909"
+            color = "#FFFFFF"
 
 
         fig.add_trace(
@@ -56,6 +56,7 @@ def plot_coefficient_dataframe(df, fig):
                     width = 10, 
                     color = color),
                 name = index,
+                marker = dict(size = 7),
                 legend = "legend1"))
 
 
@@ -79,8 +80,8 @@ def plot_coefficient_dataframe(df, fig):
         annotation_text = "Null",
         annotation_position = "top",
         annotation_font = dict(size = 15),
-        line_color = "#A1C909",
-        annotation = dict(font_color = "#A1C909")
+        line_color = "#FFFFFF",
+        annotation = dict(font_color = "#FFFFFF")
     )
 
 
@@ -96,9 +97,9 @@ def main():
     coefficient_df = pd.read_parquet("../data/10.regression_results.parquet")
     fig = create_figure("")
     plot_coefficient_dataframe(coefficient_df, fig)
-    js = '''document.body.style.backgroundColor = "#202825"; '''
-    fig.show(renderer="browser", post_script=[js])
-    #fig.write_image(f"../plots/{datetime.now().strftime("%Y-%m-%d--%H-%M-%S")}.png", width = 1300, height = 1200, scale = 6)
+    js = '''document.body.style.backgroundColor = "#101512"; '''
+    #fig.show(renderer="browser", post_script=[js])
+    fig.write_image(f"../plots/{datetime.now().strftime("%Y-%m-%d--%H-%M-%S")}.png", width = 1500, height = 1300, scale = 6)
 
 
 main()
