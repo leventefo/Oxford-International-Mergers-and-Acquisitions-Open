@@ -87,10 +87,17 @@ def run_regressions():
     for data_set in ["9.index_with_hood"]:
         df_myData = pd.read_parquet(f"../data/{data_set}.parquet")
         regression_results = regress(df_myData)
+        save_regression(regression_results)
         print(regression_results.summary())
         #save_regression_summary(regression_results, "10.regression_summary")
         #save_regression(get_coef_table(regression_results), "10.regression_results")
         #save_regression(create_coefficient_dataframe(regression_results), "10.regression_results")
+
+
+
+def save_regression(regression_results):
+    
+    regression_results.save("../data/regression_results.pickle")
         
 
 
